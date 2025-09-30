@@ -4,6 +4,7 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { MarkdownRenderer } from '../components/MarkdownRenderer';
 import { enviarParaIA } from '../services/aiServices';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const ChatIA = () => {
   const [messages, setMessages] = useState([
@@ -19,16 +20,13 @@ export const ChatIA = () => {
   const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  useEffect(() => { scrollToBottom(); }, [messages]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
+
     const userMessage = { id: Date.now(), type: 'user', content: inputMessage, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
     const currentInput = inputMessage;
@@ -50,9 +48,7 @@ export const ChatIA = () => {
         isError: true
       };
       setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
+    } finally { setIsLoading(false); }
   };
 
   const handleKeyPress = (e) => {
@@ -62,92 +58,115 @@ export const ChatIA = () => {
     }
   };
 
+  const suggestedQuestions = [
+    'Como lidar com pacientes com ansiedade?',
+    'Técnicas para terapia infantil',
+    'Abordagens para terapia de casal',
+    'Sinais de alerta em depressão'
+  ];
+
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white/70 mb-2">Chat com IA</h1>
-        <p className="text-white">Assistente especializada em psicologia para apoiar sua prática clínica</p>
+    <div className="max-w-5xl mx-auto p-6 space-y-6 min-h-screen bg-gradient-to-b from-dark to-dark/90">
+      
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-4xl font-extrabold text-white/70 mb-1">Chat com IA</h1>
+        <p className="text-white/70 text-lg">Assistente especializada em psicologia para apoiar sua prática clínica</p>
       </div>
 
-      <Card className="h-[600px] flex flex-col">
+      {/* Chat Card */}
+      <Card className="flex flex-col h-[650px] bg-gradient-to-tr from-white/5 to-white/10 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden shadow-lg">
+        
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          {messages.map((message) => (
-            <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`flex items-start space-x-3 max-w-[80%] ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${message.type === 'user' ? 'bg-light text-white' : 'bg-accent text-white'}`}>
-                  {message.type === 'user' ? <User size={16} /> : <Bot size={16} />}
+          <AnimatePresence initial={false}>
+            {messages.map(message => (
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className={`flex items-start space-x-3 max-w-[80%] ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                  
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${message.type === 'user' ? 'bg-light text-dark' : 'bg-accent text-white'} shadow-md`}>
+                    {message.type === 'user' ? <User size={18} /> : <Bot size={18} />}
+                  </div>
+
+                  <div className={`rounded-2xl px-5 py-3 ${message.type === 'user' ? 'bg-light text-dark' : message.isError ? 'bg-red-100 text-red-800 border border-red-300' : 'bg-white/10 text-white'} backdrop-blur-md`}>
+                    {message.type === 'user' ? (
+                      <p className="text-sm leading-relaxed">{message.content}</p>
+                    ) : (
+                      <div className="text-sm leading-relaxed"><MarkdownRenderer content={message.content} /></div>
+                    )}
+                    <p className="text-xs opacity-50 mt-1 text-right">
+                      {message.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
                 </div>
-                <div className={`rounded-2xl px-4 py-3 ${message.type === 'user' ? 'bg-light text-white' : message.isError ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-gray-100 text-gray-800'}`}>
-                  {message.type === 'user' ? (
-                    <p className="text-sm leading-relaxed">{message.content}</p>
-                  ) : (
-                    <div className="text-sm"><MarkdownRenderer content={message.content} /></div>
-                  )}
-                  <p className="text-xs opacity-70 mt-2">
-                    {message.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
 
           {isLoading && (
             <div className="flex justify-start">
               <div className="flex items-start space-x-3 max-w-[80%]">
-                <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center">
-                  <Bot size={16} />
+                <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center shadow-md">
+                  <Bot size={18} />
                 </div>
-                <div className="bg-gray-100 rounded-2xl px-4 py-3">
-                  <div className="flex items-center space-x-2">
-                    <Loader2 size={16} className="animate-spin text-accent" />
-                    <span className="text-sm text-gray-600">Pensando...</span>
-                  </div>
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 flex items-center space-x-2">
+                  <Loader2 size={16} className="animate-spin text-accent" />
+                  <span className="text-sm text-white/70">Pensando...</span>
                 </div>
               </div>
             </div>
           )}
+
           <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-gray-200 p-4">
-          <div className="flex space-x-3">
-            <textarea
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Digite sua pergunta sobre psicologia..."
-              className="flex-1 resize-none border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-light focus:border-transparent text-white"
-              rows="2"
-              disabled={isLoading}
-            />
-            <Button onClick={handleSendMessage} disabled={!inputMessage.trim() || isLoading} className="self-end">
-              <Send size={18} />
-            </Button>
-          </div>
+        <div className="border-t border-white/20 p-4 bg-white/5 backdrop-blur-lg rounded-b-3xl flex items-center space-x-3">
+          <textarea
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Digite sua pergunta sobre psicologia..."
+            className="flex-1 resize-none border border-white/20 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder-white/50"
+            rows={2}
+            disabled={isLoading}
+          />
+          <Button onClick={handleSendMessage} disabled={!inputMessage.trim() || isLoading} className="bg-accent hover:bg-accent/90 p-3 rounded-xl transition-all shadow-lg flex items-center justify-center">
+            <Send size={20} className="text-white"/>
+          </Button>
         </div>
       </Card>
 
+      {/* Error Notification */}
       {error && (
-        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4 p-4 bg-red-50 border border-red-300 rounded-xl flex items-center space-x-2 shadow-sm"
+        >
           <AlertCircle size={20} className="text-red-500" />
           <span className="text-red-700">{error}</span>
-        </div>
+        </motion.div>
       )}
 
-      {/* Quick Actions */}
+      {/* Suggested Questions */}
       <div className="mt-6">
-        <h3 className="text-lg font-semibold text-dark mb-3">Perguntas Sugeridas</h3>
+        <h3 className="text-xl font-semibold text-white mb-3">Perguntas Sugeridas</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {['Como lidar com pacientes com ansiedade?', 'Técnicas para terapia infantil', 'Abordagens para terapia de casal', 'Sinais de alerta em depressão'].map((suggestion, index) => (
+          {suggestedQuestions.map((question, index) => (
             <button
               key={index}
-              onClick={() => setInputMessage(suggestion)}
-              className="text-left p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-light transition-colors"
+              onClick={() => setInputMessage(question)}
+              className="text-left p-4 bg-white/10 border border-white/20 rounded-2xl hover:bg-white/20 hover:border-accent transition-all shadow-md text-white"
               disabled={isLoading}
             >
-              <span className="text-sm text-gray-700">{suggestion}</span>
+              <span className="text-sm">{question}</span>
             </button>
           ))}
         </div>

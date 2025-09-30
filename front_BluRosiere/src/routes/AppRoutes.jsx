@@ -36,6 +36,7 @@ import { Agendamentos } from '../pages/Agendamentos';
 import { Solicitacoes } from '../pages/Solicitacoes';
 import { Pacientes } from '../pages/Pacientes';
 import { PacienteDetalhes } from '../pages/PacienteDetalhes';
+import { SessaoDetalhes } from '../pages/SessaoDetalhes';
 
 
 
@@ -172,6 +173,12 @@ export const AppRoutes = () => {
             <PacienteDetalhes /> 
           </ProtectedRoute>
         } />
+         <Route path="/sessao/:sessionId" element={
+          <ProtectedRoute>
+            <SessaoDetalhes/>
+          </ProtectedRoute>
+        } />
+ 
         
       </Routes>
     </Router>
