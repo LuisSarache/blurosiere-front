@@ -1,33 +1,32 @@
-import React from 'react';
+/**
+ * Componente de campo de formulário com validação
+ * Encapsula Input com label e mensagem de erro
+ */
+
+import { Input } from './Input';
 
 export const FormField = ({
-    label,
-    value,
-    onChange,
-    placeholder = '',
-    required = false,
-    as = 'input',
-    type = 'text',
-    className = '',
+  label,
+  error,
+  required,
+  helperText,
+  ...props
 }) => {
-
-    const Tag = as;
-
-    return (
-        <div className="mb-4">
-            {label && (
-                <label className="block text-lg font-medium text-dark mb-2">
-                </label>
-                )}
-                <Tag
-                type={Tag === 'input' ? type: undefined}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                required={required}
-                rows={Tag === 'textarea' ? 4 : undefined} 
-                className={'w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-dark focus:outline-nome focus:ring-2 focus:ring-light ${className}'}
-                />
-        </div>
-    );
+  return (
+    <div className="space-y-1">
+      {label && (
+        <label className="block text-sm font-medium text-white/70">
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </label>
+      )}
+      <Input {...props} error={error} />
+      {error && (
+        <p className="text-xs text-red-500 mt-1">{error}</p>
+      )}
+      {helperText && !error && (
+        <p className="text-xs text-white/50 mt-1">{helperText}</p>
+      )}
+    </div>
+  );
 };

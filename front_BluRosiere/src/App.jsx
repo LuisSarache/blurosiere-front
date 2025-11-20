@@ -1,17 +1,24 @@
-//* componente responsavel por emitir notificações utilizando a biblioteca react-hot-tost
-import { AuthProvider } from "./context/AuthContext";
+/**
+ * Componente principal da aplicação
+ * Configura providers e estrutura global
+ */
 
-//* importação do arquivo authProvider resposavel pela autenticação dos usuarios e controle de rotas privadas
+import { AuthProvider } from './context/AuthContext';
+import { AppRoutes } from './routes/AppRoutes';
+import ErrorBoundary from './components/ErrorBoundary';
 
-//* importação do appRoutes componente de gerenciamento de rotas
-import { AppRoutes } from "./routes/AppRoutes";
-
-//* construção codigo principal
-function App(){
-    return(
-        <AuthProvider>
-            <AppRoutes/>
-        </AuthProvider>
-    )
+/**
+ * Componente App
+ * Envolve toda a aplicação com providers necessários
+ */
+function App() {
+  return (
+    <ErrorBoundary>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </ErrorBoundary>
+  );
 }
+
 export default App;
