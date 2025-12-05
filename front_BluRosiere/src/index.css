@@ -1,212 +1,515 @@
-@import url('https://fonts.googleapis.com/css2?family=Sanchez&display=swap');
-
-@import "tailwindcss"; /* Importa todas as utilidades do TailwindCSS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "./styles/design-tokens.css";
+@import "./styles/premium-effects.css";
 
 /* ==============================
-   Paleta de cores personalizada
+   CONFIGURAÇÃO TAILWIND
    ============================== */
 @theme {
-  --color-dark: #1E3A5F;       /* Azul bem escuro */
-  --color-medium: #024873;     /* Azul médio */
-  --color-light: #3B82F6;      /* Azul claro */
-  --color-accent: #60A5FA;     /* Azul/acento esverdeado */
-  --color-background: #F2EFE9; /* Bege claro para fundo */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+
+  --color-secondary-50: #f8fafc;
+  --color-secondary-100: #f1f5f9;
+  --color-secondary-200: #e2e8f0;
+  --color-secondary-300: #cbd5e1;
+  --color-secondary-400: #94a3b8;
+  --color-secondary-500: #64748b;
+  --color-secondary-600: #475569;
+  --color-secondary-700: #334155;
+  --color-secondary-800: #1e293b;
+  --color-secondary-900: #0f172a;
+
+  --color-success-50: #f0fdf4;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
 }
 
 /* ==============================
-   Classes utilitárias de cores
+   ESTILO GLOBAL
    ============================== */
-/* Fundo */
-.bg-dark { background-color: var(--color-dark); }
-.bg-medium { background-color: var(--color-medium); }
-.bg-light { background-color: var(--color-light); }
-.bg-accent { background-color: var(--color-accent); }
-.bg-background { background-color: var(--color-background); }
+* {
+  box-sizing: border-box;
+}
 
-/* Texto */
-.text-dark { color: var(--color-dark); }
-.text-medium { color: var(--color-medium); }
-.text-light { color: var(--color-light); }
-.text-accent { color: var(--color-accent); }
-
-/* Bordas */
-.border-dark { border-color: var(--color-dark); }
-.border-medium { border-color: var(--color-medium); }
-.border-light { border-color: var(--color-light); }
-.border-accent { border-color: var(--color-accent); }
-
-/* Ring (foco do Tailwind) */
-.ring-dark { --tw-ring-color: var(--color-dark); }
-.ring-medium { --tw-ring-color: var(--color-medium); }
-.ring-light { --tw-ring-color: var(--color-light); }
-.ring-accent { --tw-ring-color: var(--color-accent); }
-
-/* ==============================
-   Efeitos de hover (interação)
-   ============================== */
-/* Fundo ao passar mouse */
-.hover\:bg-dark:hover { background-color: var(--color-dark); }
-.hover\:bg-medium:hover { background-color: var(--color-medium); }
-.hover\:bg-light:hover { background-color: var(--color-light); }
-.hover\:bg-accent:hover { background-color: var(--color-accent); }
-
-/* Texto ao passar mouse */
-.hover\:text-dark:hover { color: var(--color-dark); }
-.hover\:text-medium:hover { color: var(--color-medium); }
-.hover\:text-light:hover { color: var(--color-light); }
-.hover\:text-accent:hover { color: var(--color-accent); }
-
-/* Bordas ao passar mouse */
-.hover\:border-dark:hover { border-color: var(--color-dark); }
-.hover\:border-medium:hover { border-color: var(--color-medium); }
-.hover\:border-light:hover { border-color: var(--color-light); }
-.hover\:border-accent:hover { border-color: var(--color-accent); }
-
-/* ==============================
-   Estilo global do body
-   ============================== */
 body {
-
-  font-family: 'Inter', 'Nunito', 'Roboto', sans-serif; /* Fontes */
-  font-weight: 500; /* Peso médio */
-  background: linear-gradient(
-    135deg,
-    var(--color-medium) 0%,         /* Começa azul claro */
-    var(--color-medium) 50%,       /* Vai para azul médio */
-    var(--color-light) 100%   /* Termina bege claro */
-  );
-  min-height: 100vh; /* Sempre ocupa altura mínima da tela */
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ==============================
-   Efeito Glassmorphism
+   COMPONENTES REUTILIZÁVEIS
    ============================== */
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.9);         /* Fundo branco translúcido */
-  backdrop-filter: blur(20px);                  /* Efeito de desfoque */
-  border-radius: 24px;                          /* Bordas arredondadas */
-  border: 1px solid rgba(255, 255, 255, 0.2);   /* Borda suave */
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Sombra */
+.glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
-.glassmorphism-light {
-  background: rgba(255, 255, 255, 0.15);        /* Versão mais clara/transparente */
+.glass-card-light {
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(16px);
-  border-radius: 16px;
+  border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* ==============================
-   Elementos decorativos de fundo
+   ELEMENTOS DECORATIVOS
    ============================== */
 .bg-decoration {
-  position: fixed;      /* Fica fixo na tela */
-  border-radius: 50%;   /* Forma circular */
-  filter: blur(40px);   /* Borrado */
-  opacity: 0.3;         /* Transparente */
-  z-index: -1;          /* Fica atrás de tudo */
+  position: fixed;
+  border-radius: var(--border-radius-full);
+  filter: blur(60px);
+  opacity: 0.15;
+  z-index: -1;
+  pointer-events: none;
 }
 
-/* Bolha 1 */
-.bg-decoration-1 {
-  width: 300px;
-  height: 300px;
-  background: var(--color-accent);
-  top: 10%;
-  left: 10%;
-  animation: float 6s ease-in-out infinite; /* Animação de flutuar */
-}
-
-/* Bolha 2 */
-.bg-decoration-2 {
-  width: 200px;
-  height: 200px;
-  background: var(--color-light);
-  top: 60%;
-  right: 15%;
-  animation: float 8s ease-in-out infinite reverse; /* Flutua ao contrário */
-}
-
-/* Bolha 3 */
+.bg-decoration-1,
+.bg-decoration-2,
 .bg-decoration-3 {
-  width: 150px;
-  height: 150px;
-  background: var(--color-medium);
-  bottom: 20%;
-  left: 20%;
-  animation: float 7s ease-in-out infinite;
+  display: none;
 }
 
 /* ==============================
-   Animações
+   ANIMAÇÕES
    ============================== */
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }   /* Posição inicial e final */
-  50% { transform: translateY(-20px); }      /* Sobe 20px no meio */
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(1deg); }
+  66% { transform: translateY(-25px) rotate(-1deg); }
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); } /* Começa embaixo e invisível */
-  to { opacity: 1; transform: translateY(0); }      /* Termina visível e no lugar */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
 }
 
-@keyframes fadeInLeft {
-  from { opacity: 0; transform: translateX(-30px); } /* Começa à esquerda e invisível */
-  to { opacity: 1; transform: translateX(0); }       /* Termina visível no lugar */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-/* Classes utilitárias para aplicar animações */
-.animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
-.animate-fade-in-left { animation: fadeInLeft 0.6s ease-out; }
+.animate-pulse-slow {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
 
 /* ==============================
-   Botões
+   COMPONENTES DE BOTÃO
    ============================== */
-/* Botão principal */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-normal);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-decoration: none;
+}
+
 .btn-primary {
-  background: var(--color-light);
+  background: rgba(255, 255, 255, 0.25);
   color: white;
-  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
 }
+
 .btn-primary:hover {
-  background: var(--color-accent); /* Muda cor no hover */
-  transform: scale(1.02);          /* Leve zoom */
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Botão fantasma (sem fundo) */
-.btn-ghost {
-  background: transparent;
-  color: var(--color-light);
-  transition: all 0.3s ease;
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
 }
-.btn-ghost:hover {
-  color: var(--color-medium); /* Texto muda de cor no hover */
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* ==============================
-   Campos de input
+   COMPONENTES DE INPUT
    ============================== */
-.input-field {
-  background: rgba(255, 255, 255, 0.1);           /* Fundo translúcido */
-  border: 1px solid rgba(255, 255, 255, 0.2);     /* Borda suave */
-  transition: all 0.3s ease;
+.input-base {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 11px 16px;
+  color: white;
+  font-size: 15px;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+  height: 44px;
 }
-.input-field:focus {
-  background: rgba(255, 255, 255, 0.2);           /* Mais visível no foco */
-  border-color: var(--color-light);               /* Destacado em azul claro */
-  box-shadow: 0 0 0 3px rgba(36, 147, 191, 0.1);  /* Glow em volta */
+
+.input-base::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.input-base:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.input-base:focus {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+.input-error {
+  border-color: var(--color-error-500);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
 }
 
 /* ==============================
-   Página mobile de redirecionamento
+   UTILITÁRIOS RESPONSIVOS
    ============================== */
 .mobile-redirect {
-  background: var(--color-dark); /* Fundo azul escuro */
-  color: white;                  /* Texto branco */
-  min-height: 100vh;             /* Ocupa tela inteira */
-  display: flex;                 /* Flexbox */
-  align-items: center;           /* Centraliza verticalmente */
-  justify-content: center;       /* Centraliza horizontalmente */
-  text-align: center;            /* Texto centralizado */
-  padding: 2rem;                 /* Espaçamento interno */
+  background: var(--color-background);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-8);
+}
+
+/* ==============================
+   SCROLLBAR PERSONALIZADA
+   ============================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--border-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ==============================
+   SELEÇÃO DE TEXTO
+   ============================== */
+::selection {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* ==============================
+   MELHORIAS DE CONFORTO VISUAL
+   ============================== */
+
+/* Tipografia mais confortável */
+h1, h2, h3, h4, h5, h6 {
+  color: #f1f5f9;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+p {
+  color: #cbd5e1;
+  line-height: 1.8;
+  margin-bottom: 1em;
+}
+
+/* Links mais suaves */
+a {
+  color: #93c5fd;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #bfdbfe;
+}
+
+/* Cards com melhor contraste */
+.card-enhanced {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.card-enhanced:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Badges e tags mais suaves */
+.badge-soft {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Dividers sutis */
+.divider-soft {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  margin: 24px 0;
+}
+
+/* Tooltips mais legíveis */
+.tooltip-enhanced {
+  background: rgba(15, 23, 42, 0.95);
+  color: #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+}
+
+/* Tabelas mais confortáveis */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th {
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  font-weight: 600;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+td {
+  padding: 14px 16px;
+  color: #e2e8f0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Modais com melhor foco */
+.modal-overlay {
+  background: rgba(10, 15, 30, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Estados de loading mais suaves */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Alertas mais amigáveis */
+.alert-info {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.alert-success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  color: #86efac;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.alert-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Foco acessível e confortável */
+*:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Seleção de texto mais suave */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: #f1f5f9;
+}
+
+/* Transições suaves globais */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Redução de movimento para acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Melhor contraste em telas pequenas */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Modo de alto contraste */
+@media (prefers-contrast: high) {
+  body {
+    background: #000;
+    color: #fff;
+  }
+  
+  .glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .btn-primary {
+    background: #3b82f6;
+    border: 2px solid #60a5fa;
+  }
 }

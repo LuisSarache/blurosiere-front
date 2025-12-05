@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { mockApi } from '../services/mockApi';
+import { useAuth } from '../hooks/useAuth';
+import { api } from '../services';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -22,7 +22,7 @@ export const Solicitacoes = () => {
   const loadRequests = async () => {
     setLoading(true);
     try {
-      const data = await mockApi.getRequests(user.id);
+      const data = await api.getRequests(user.id);
       const pendingRequests = data.filter(req => req.status === 'pendente');
       setRequests(pendingRequests);
     } catch (error) {
@@ -35,14 +35,14 @@ export const Solicitacoes = () => {
   const handleAcceptRequest = async (requestId, requestData) => {
     setProcessingRequests(prev => new Set([...prev, requestId]));
     try {
-      const existingPatients = await mockApi.getPatients(user.id);
+      const existingPatients = await api.getPatients(user.id);
       const duplicatePatient = existingPatients.find(p => p.email === requestData.patientEmail);
       if (duplicatePatient) {
         toast.error('Este paciente já está cadastrado!');
         return;
       }
 
-      await mockApi.createPatient({
+      await api.createPatient({
         name: requestData.patientName,
         email: requestData.patientEmail,
         phone: requestData.patientPhone,
@@ -52,7 +52,7 @@ export const Solicitacoes = () => {
         psychologistId: user.id
       });
 
-      await mockApi.updateRequestStatus(requestId, 'aceito', 'Paciente aceito e cadastrado');
+      await api.updateRequestStatus(requestId, 'aceito', 'Paciente aceito e cadastrado');
       setRequests(prev => prev.filter(req => req.id !== requestId));
       toast.success('Solicitação aceita! Paciente adicionado.');
     } catch (error) {
@@ -70,7 +70,7 @@ export const Solicitacoes = () => {
   const handleRejectRequest = async (requestId) => {
     setProcessingRequests(prev => new Set([...prev, requestId]));
     try {
-      await mockApi.updateRequestStatus(requestId, 'rejeitado', 'Solicitação rejeitada');
+      await api.updateRequestStatus(requestId, 'rejeitado', 'Solicitação rejeitada');
       setRequests(prev => prev.filter(req => req.id !== requestId));
       toast.success('Solicitação rejeitada.');
     } catch (error) {

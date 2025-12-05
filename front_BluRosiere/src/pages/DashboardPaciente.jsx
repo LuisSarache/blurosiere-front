@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { mockApi } from '../services/mockApi';
+import { useAuth } from '../hooks/useAuth';
+import { api } from '../services';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -13,7 +13,7 @@ export const DashboardPaciente = () => {
 
     const { user } = useAuth();
     const [appointments, setAppointments] = useState([]);
-    const [requests, useRequests] = useState ([]);
+    const [requests, setRequests] = useState ([]);
     const [_psychologists, setPsychologists] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -21,15 +21,15 @@ export const DashboardPaciente = () => {
         const loadData = async () => {
             try {
                 const [requestData, psychologistsData] = await Promise.all([
-                    mockApi.getRequests(),
-                    mockApi.getPsychologists()
+                    api.getRequests(),
+                    api.getPsychologists()
                 ]);
                 
-                const userRequest = requestData.filter(req => req.patient.email === user.email);
+                const userRequest = requestData.filter(req => req.patientEmail === user?.email);
                 setRequests(userRequest);
                 setPsychologists(psychologistsData);
 
-                const AllAppointments = await mockApi.getAppointmentByEmail(user.email);
+                const AllAppointments = await api.getAppointmentsByEmail(user?.email);
                 setAppointments(AllAppointments);
                 
 
@@ -41,7 +41,7 @@ export const DashboardPaciente = () => {
         }
         loadData();
         
-    }, [user.email])
+    }, [user?.email])
 
     if (loading) return <LoadingSpinner size='lg'/>
     const today = new Date();

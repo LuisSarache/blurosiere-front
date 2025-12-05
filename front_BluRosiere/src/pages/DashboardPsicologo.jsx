@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { mockApi } from '../services/mockApi';
+import { useAuth } from '../hooks/useAuth';
+import { api } from '../services';
 import { Calendar, Users, Bell, CheckCheck } from 'lucide-react';
 import { WelcomeCard } from "../components/WelcomeCard";
 import { LoadingSpinner } from "../components/LoadingSpinner";
@@ -17,9 +17,9 @@ export const DashboardPsicologo = () => {
     setLoading(true);
     try {
       const [appointmentsData, patientsData, requestsData] = await Promise.all([
-        mockApi.getAppointments(user.id, 'psicologo'),
-        mockApi.getPatients(user.id),
-        mockApi.getRequests(user.id)
+        api.getAppointments(user.id, 'psicologo'),
+        api.getPatients(user.id),
+        api.getRequests(user.id)
       ]);
       setAppointments(appointmentsData);
       setPatients(patientsData);

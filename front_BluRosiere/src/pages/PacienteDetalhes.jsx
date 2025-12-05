@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { mockApi } from '../services/mockApi';
+import { useAuth } from '../hooks/useAuth';
+import { api } from '../services';
 import toast from 'react-hot-toast';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Header } from '../components/Header';
@@ -26,7 +26,7 @@ export const PacienteDetalhes = () => {
   const updateSessionStatus = async (sessionId, newStatus) => {
     setUpdatingSessions((prev) => new Set([...prev, sessionId]));
     try {
-      await mockApi.updateSessionStatus(sessionId, newStatus);
+      await api.updateSessionStatus(sessionId, newStatus);
       setSessions((prev) =>
         prev.map((session) => (session.id === sessionId ? { ...session, status: newStatus } : session))
       );
@@ -47,7 +47,7 @@ export const PacienteDetalhes = () => {
 
     setCreatingSession(true);
     try {
-      const newSession = await mockApi.createAppointment({
+      const newSession = await api.createAppointment({
         patientId: parseInt(id),
         psychologistId: user.id,
         ...newSessionData,
@@ -71,7 +71,7 @@ export const PacienteDetalhes = () => {
   useEffect(() => {
     const loadPatientData = async () => {
       try {
-        const patients = await mockApi.getPatients(user.id);
+        const patients = await api.getPatients(user.id);
         const patientData = patients.find((p) => p.id === parseInt(id));
 
         if (!patientData) {
@@ -81,7 +81,7 @@ export const PacienteDetalhes = () => {
 
         setPatient(patientData);
 
-        const appointments = await mockApi.getAppointments(user.id, 'psicologo');
+        const appointments = await api.getAppointments(user.id, 'psicologo');
         const patientSessions = appointments
           .filter((apt) => apt.patientId === parseInt(id))
           .sort((a, b) => new Date(b.date) - new Date(a.date));

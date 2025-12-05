@@ -1,8 +1,8 @@
 // ===== IMPORTS =====
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { mockApi } from '../services/mockApi';
+import { useAuth } from '../hooks/useAuth';
+import { api } from '../services';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Bell } from 'lucide-react';
@@ -24,7 +24,7 @@ export const Agendamentos = () => {
 
   const loadPsychologists = async () => {
     try {
-      const data = await mockApi.getPsychologists();
+      const data = await api.getPsychologists();
       setPsychologists(data);
     } catch {
       toast.error('Erro ao carregar psicólogos');
@@ -40,7 +40,7 @@ export const Agendamentos = () => {
 
     setSubmitting(true);
     try {
-      await mockApi.createRequest({
+      await api.createRequest({
         patientName: user.name,
         patientEmail: user.email,
         patientPhone: user.phone || '(11) 99999-9999',

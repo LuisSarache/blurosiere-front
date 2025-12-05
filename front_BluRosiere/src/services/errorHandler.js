@@ -114,7 +114,7 @@ export const validateResponse = async (response) => {
 
   try {
     return await response.json();
-  } catch (err) {
+  } catch {
     throw new AppError('Erro ao processar resposta', 'PARSE_ERROR', 500);
   }
 };
@@ -173,7 +173,7 @@ export const logError = (error, context = {}) => {
   };
 
   console.error('Error Log:', errorData);
-
-  // Aqui você poderia enviar para um serviço de monitoramento
-  // como Sentry, LogRocket, etc.
+  
+  // Retorna errorData para possível uso futuro
+  return errorData;
 };

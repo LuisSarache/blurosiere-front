@@ -1,16 +1,83 @@
-import { Button } from '../components/Button';
-import { ArrowLeft } from 'lucide-react';
+import { forwardRef } from 'react';
+import { ArrowLeft, Home, User, Settings } from 'lucide-react';
+import { Button } from './Button';
+import { Flex } from './Layout';
+import { H2, H3 } from './Typography';
 
-export const Header = ({ onBack, title }) => (
-  <div className="flex items-center gap-6 mb-6">
-    <Button
-      variant="secondary"
-      onClick={onBack}
-      className="flex items-center gap-3 bg-blue-900/60 backdrop-blur-2xl border border-blue-500/20 text-white hover:bg-blue-800/80 hover:text-blue-300 transition-all duration-300 shadow-md rounded-xl px-4 py-2"
+export const Header = forwardRef(({ 
+  onBack, 
+  title, 
+  subtitle,
+  actions,
+  showBackButton = true,
+  variant = 'default',
+  className = '',
+  ...props 
+}, ref) => {
+  const variants = {
+    default: 'mb-8',
+    compact: 'mb-4',
+    large: 'mb-12'
+  };
+
+  return (
+    <header 
+      ref={ref}
+      className={`
+        ${variants[variant]}
+        ${className}
+      `} 
+      {...props}
     >
-      <ArrowLeft size={22} />
-      Voltar
-    </Button>
-    <h1 className="text-4xl font-extrabold text-white/90 drop-shadow-lg tracking-wide">{title}</h1>
-  </div>
-);
+      <Flex justify="between" align="center" className="flex-wrap gap-4">
+        <Flex align="center" gap="lg">
+          {showBackButton && onBack && (
+            <Button
+              variant="secondary"
+              onClick={onBack}
+              leftIcon={<ArrowLeft className="w-4 h-4" />}
+              className="shrink-0"
+            >
+              Voltar
+            </Button>
+          )}
+          
+          <div className="space-y-1">
+            {title && (
+              <H2 className="text-gradient leading-tight">
+                {title}
+              </H2>
+            )}
+            {subtitle && (
+              <H3 color="muted" weight="normal" className="text-lg">
+                {subtitle}
+              </H3>
+            )}
+          </div>
+        </Flex>
+        
+        {actions && (
+          <Flex gap="sm" className="shrink-0">
+            {actions}
+          </Flex>
+        )}
+      </Flex>
+    </header>
+  );
+});
+
+Header.displayName = 'Header';
+
+// Header específico para páginas
+export const PageHeader = forwardRef((props, ref) => (
+  <Header ref={ref} variant="large" {...props} />
+));
+
+PageHeader.displayName = 'PageHeader';
+
+// Header específico para seções
+export const SectionHeader = forwardRef((props, ref) => (
+  <Header ref={ref} variant="compact" showBackButton={false} {...props} />
+));
+
+SectionHeader.displayName = 'SectionHeader';

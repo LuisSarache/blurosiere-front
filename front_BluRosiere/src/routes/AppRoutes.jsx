@@ -11,7 +11,7 @@ import { ROUTES, USER_TYPES } from '../constants';
 import { Sidebar } from '../components/Sidebar';
 import { PublicNavbar } from '../components/PublicNavbar';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { ToastManager } from '../components/ToastManager';
+import { Toaster } from 'react-hot-toast';
 
 // Páginas públicas
 import { Home } from '../pages/Home';
@@ -90,7 +90,7 @@ const Dashboard = () => {
 export const AppRoutes = () => {
   return (
     <Router>
-      <ToastManager />
+      <Toaster position="top-right" />
       <Routes>
         {/* Rotas Públicas */}
         <Route path={ROUTES.HOME} element={

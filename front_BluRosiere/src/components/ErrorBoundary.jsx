@@ -1,60 +1,80 @@
-/**
- * Error Boundary - Captura erros em componentes filhos
- * Exibe interface de erro amigável ao usuário
- */
-
 import { Component } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { Button } from './Button';
+import { Card, CardContent } from './Card';
+import { H3, Paragraph } from './Typography';
+import { Stack } from './Layout';
 
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, error };
+    return { hasError: true };
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Erro capturado por ErrorBoundary:', error, errorInfo);
+    this.setState({
+      error,
+      errorInfo
+    });
+    
+    // Log error to monitoring service
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
-
-  resetError = () => {
-    this.setState({ hasError: false, error: null });
-  };
 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-blue-700 p-4">
-          <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full">
-            <div className="flex justify-center mb-4">
-              <AlertCircle className="w-16 h-16 text-red-500" />
-            </div>
-            <h1 className="text-2xl font-bold text-center text-gray-800 mb-2">
-              Algo deu errado
-            </h1>
-            <p className="text-gray-600 text-center mb-4">
-              Desculpe, ocorreu um erro inesperado. Por favor, tente novamente.
-            </p>
-            {process.env.NODE_ENV === 'development' && (
-              <details className="mb-4 p-3 bg-gray-100 rounded text-sm">
-                <summary className="cursor-pointer font-semibold text-gray-700">
-                  Detalhes do erro
-                </summary>
-                <pre className="mt-2 text-xs text-red-600 overflow-auto">
-                  {this.state.error?.toString()}
-                </pre>
-              </details>
-            )}
-            <button
-              onClick={this.resetError}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition"
-            >
-              Tentar novamente
-            </button>
-          </div>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <Card variant="elevated" className="max-w-md w-full text-center">
+            <CardContent>
+              <Stack spacing="lg" align="center">
+                <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center">
+                  <AlertTriangle className="w-8 h-8 text-red-400" />
+                </div>
+                
+                <div>
+                  <H3 className="text-red-400 mb-2">Algo deu errado</H3>
+                  <Paragraph color="muted" className="text-sm">
+                    Ocorreu um erro inesperado. Tente recarregar a página.
+                  </Paragraph>
+                </div>
+
+                <Stack spacing="sm" className="w-full">
+                  <Button
+                    onClick={() => window.location.reload()}
+                    leftIcon={<RefreshCw className="w-4 h-4" />}
+                    fullWidth
+                  >
+                    Recarregar Página
+                  </Button>
+                  
+                  <Button
+                    variant="ghost"
+                    onClick={() => this.setState({ hasError: false, error: null, errorInfo: null })}
+                    fullWidth
+                  >
+                    Tentar Novamente
+                  </Button>
+                </Stack>
+
+                {process.env.NODE_ENV === 'development' && this.state.error && (
+                  <details className="w-full text-left">
+                    <summary className="cursor-pointer text-sm text-white/50 mb-2">
+                      Detalhes do erro (desenvolvimento)
+                    </summary>
+                    <pre className="text-xs bg-red-500/10 p-3 rounded border border-red-500/20 overflow-auto">
+                      {this.state.error.toString()}
+                      {this.state.errorInfo.componentStack}
+                    </pre>
+                  </details>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
         </div>
       );
     }
@@ -64,3 +84,4 @@ class ErrorBoundary extends Component {
 }
 
 export default ErrorBoundary;
+export { ErrorBoundary };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { mockApi } from '../services/mockApi';
+import { useAuth } from '../hooks/useAuth';
+import { api } from '../services';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -23,13 +23,13 @@ export const SessaoDetalhes = () => {
   useEffect(() => {
     const loadSessionData = async () => {
       try {
-        const sessionData = await mockApi.getSessionDetails(parseInt(sessionId));
+        const sessionData = await api.getSessionDetails(parseInt(sessionId));
         setSession(sessionData);
         setEditNotes(sessionData.notes || '');
         setEditReport(sessionData.fullReport || '');
         setEditStatus(sessionData.status);
 
-        const patients = await mockApi.getPatients(user.id);
+        const patients = await api.getPatients(user.id);
         const patientData = patients.find(p => p.id === sessionData.patientId);
         setPatient(patientData);
       } catch (error) {
@@ -45,8 +45,8 @@ export const SessaoDetalhes = () => {
 
   const handleSave = async () => {
     try {
-      await mockApi.updateSessionStatus(session.id, editStatus);
-      await mockApi.updateSessionNotes(session.id, editNotes, editReport);
+      await api.updateSessionStatus(session.id, editStatus);
+      await api.updateSessionNotes(session.id, editNotes, editReport);
       setSession({ ...session, status: editStatus, notes: editNotes, fullReport: editReport });
       setEditing(false);
     } catch (error) {

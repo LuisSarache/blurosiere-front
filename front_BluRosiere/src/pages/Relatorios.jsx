@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Card } from "../components/Card";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { Users, Calendar, TrendingUp, AlertTriangle } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
-import { mockApi } from "../services/mockApi";
+import { useAuth } from "../hooks/useAuth";
+import { api } from "../services";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const Relatorios = () => {
@@ -15,10 +15,17 @@ export const Relatorios = () => {
   useEffect(() => {
     const loadReportsData = async () => {
       try {
-        const data = await mockApi.getReportsData(user.id);
+        const data = await api.getReportsData(user.id);
         setReportsData(data);
       } catch (error) {
         console.error(error);
+        setReportsData({
+          stats: { activePatients: 0, totalSessions: 0, attendanceRate: 0, riskAlerts: 0 },
+          frequencyData: [],
+          statusData: [],
+          riskAlerts: [],
+          patientsData: []
+        });
       } finally {
         setLoading(false);
       }

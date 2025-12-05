@@ -91,7 +91,7 @@ export const validateBirthDate = (birthDate) => {
  * @returns {boolean} True se válido
  */
 export const isValidCRP = (crp) => {
-  return /^CRP\s\d{2}\/\d{5}$/.test(crp);
+  return /^CRP\s?\d{2}\/\d{5,6}$/.test(crp);
 };
 
 /**

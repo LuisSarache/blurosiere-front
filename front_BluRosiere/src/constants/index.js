@@ -10,9 +10,8 @@ export const APP_CONFIG = {
 };
 
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://blurosiere-backend.onrender.com/api',
   TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT || '30000'),
-  DELAY_SIMULATION: 500,
 };
 
 export const USER_TYPES = {
@@ -49,10 +48,6 @@ export const PATIENT_STATUS = {
 export const STORAGE_KEYS = {
   TOKEN: 'blurosiere_token',
   USER: 'blurosiere_user',
-  USERS: 'lunysse_users',
-  PATIENTS: 'lunysse_patients',
-  APPOINTMENTS: 'lunysse_appointments',
-  REQUESTS: 'lunysse_requests',
 };
 
 export const ROUTES = {

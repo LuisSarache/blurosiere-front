@@ -1,0 +1,98 @@
+/* ==============================
+   TEMA CLARO E CLEAN
+   ============================== */
+
+h1, h2, h3, h4, h5, h6 {
+  color: #0f172a !important;
+}
+
+p {
+  color: #475569 !important;
+}
+
+a {
+  color: #3b82f6 !important;
+}
+
+a:hover {
+  color: #2563eb !important;
+}
+
+.card-enhanced {
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.card-enhanced:hover {
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.badge-soft {
+  background: #eff6ff !important;
+  color: #1e40af !important;
+  border: 1px solid #dbeafe !important;
+}
+
+.divider-soft {
+  background: #e2e8f0 !important;
+}
+
+.tooltip-enhanced {
+  background: #1e293b !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+th {
+  background: #f8fafc !important;
+  color: #475569 !important;
+}
+
+td {
+  color: #1e293b !important;
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+tr:hover td {
+  background: #f8fafc !important;
+}
+
+.modal-overlay {
+  background: rgba(15, 23, 42, 0.5) !important;
+}
+
+.modal-content {
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%) !important;
+}
+
+.alert-info {
+  background: #eff6ff !important;
+  border: 1px solid #bfdbfe !important;
+  color: #1e40af !important;
+}
+
+.alert-success {
+  background: #f0fdf4 !important;
+  border: 1px solid #bbf7d0 !important;
+  color: #166534 !important;
+}
+
+.alert-warning {
+  background: #fffbeb !important;
+  border: 1px solid #fde68a !important;
+  color: #92400e !important;
+}
+
+.alert-error {
+  background: #fef2f2 !important;
+  border: 1px solid #fecaca !important;
+  color: #991b1b !important;
+}

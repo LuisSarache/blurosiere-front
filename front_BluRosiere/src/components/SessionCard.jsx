@@ -4,7 +4,7 @@ import { SessionForm } from './SessionForm';
 import { SessionList } from './SessionList';
 import { Button } from '../components/Button';
 
-export const SessionsCard = ({
+export const SessionCard = ({
   sessions,
   showForm,
   formData,
@@ -52,3 +52,5 @@ export const SessionsCard = ({
     </div>
   </Card>
 );
+
+export const SessionsCard = SessionCard;

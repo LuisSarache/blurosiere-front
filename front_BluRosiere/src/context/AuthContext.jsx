@@ -24,12 +24,20 @@ export const AuthProvider = ({ children }) => {
         const token = getAuthToken();
         const userData = getUser();
 
-        if (token && userData) {
+        if (token && userData && userData.email) {
           setUser(userData);
+        } else {
+          // Limpa dados inválidos
+          removeAuthToken();
+          removeUser();
+          setUser(null);
         }
       } catch (err) {
         console.error('Erro ao inicializar autenticação:', err);
         setError(err.message);
+        removeAuthToken();
+        removeUser();
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -45,6 +53,9 @@ export const AuthProvider = ({ children }) => {
    */
   const login = useCallback((userData, token) => {
     try {
+      if (!userData || !userData.email) {
+        throw new Error('Dados de usuário inválidos');
+      }
       saveAuthToken(token);
       saveUser(userData);
       setUser(userData);
@@ -77,6 +88,9 @@ export const AuthProvider = ({ children }) => {
    */
   const updateUser = useCallback((userData) => {
     try {
+      if (!user) {
+        throw new Error('Usuário não autenticado');
+      }
       const updated = { ...user, ...userData };
       saveUser(updated);
       setUser(updated);
@@ -96,7 +110,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const value = {
-    user,
+    user: user || null,
     loading,
     error,
     login,

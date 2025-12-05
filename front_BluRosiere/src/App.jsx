@@ -1,21 +1,16 @@
-/**
- * Componente principal da aplicação
- * Configura providers e estrutura global
- */
-
+import { Suspense } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { AppRoutes } from './routes/AppRoutes';
 import ErrorBoundary from './components/ErrorBoundary';
+import { PageLoader } from './components/LoadingSpinner';
 
-/**
- * Componente App
- * Envolve toda a aplicação com providers necessários
- */
 function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <AppRoutes />
+        <Suspense fallback={<PageLoader message="Carregando aplicação..." />}>
+          <AppRoutes />
+        </Suspense>
       </AuthProvider>
     </ErrorBoundary>
   );
